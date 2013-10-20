@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "container:"
+      name = "dummies">
+   </Group>
+   <Group
+      location = "container:"
+      name = "Example">
+      <FileRef
+         location = "group:../../addons/ofxXbeeNetwork/example/ofxXbeeNetwork.xcodeproj">
+      </FileRef>
+   </Group>
    <FileRef
-      location = "self:saman.xcodeproj">
+      location = "container:saman/saman.xcodeproj">
    </FileRef>
 </Workspace>
