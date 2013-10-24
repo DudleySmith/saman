@@ -8,10 +8,10 @@
 
 #include "samanNode.h"
 
-samanNode::samanNode(){
-    
-}
+samanNode::samanNode() : ofxXbeeNode(){
+
+};
 
 samanNode::~samanNode(){
     
-}
+};

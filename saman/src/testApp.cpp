@@ -7,11 +7,31 @@ void testApp::setup(){
 	ofBackground(255);
 	ofSetLogLevel(OF_LOG_VERBOSE);
     
+    // Change the data path
+    ofEnableDataPath();
+    ofSetDataPathRoot(dataPath);
+    
+    ofDirectory  dirDataPath = ofToDataPath("");
+    if(dirDataPath.exists() && !dirDataPath.isDirectoryEmpty("")){
+        ofLogVerbose() << dirDataPath.getAbsolutePath() << " exists and full of files" ;
+    }else{
+        ofLogError() << dirDataPath.getAbsolutePath() << ": It's emtpy or not exists.";
+    }
+    
     // GUI --
     setupGui();
-    // Network
+    m_pxDataPath = dirDataPath.getAbsolutePath();
+    
+    // Network --
     m_oXbees.setup(m_pxConnection);
     m_oXbees.addNode("1");
+    m_oXbees.addNode("2");
+    m_oXbees.addNode("3");
+    m_oXbees.addNode("4");
+    m_oXbees.addNode("5");
+    m_oXbees.addNode("6");
+    m_oXbees.addNode("7");
+    m_oXbees.addNode("8");
     
 }
 
@@ -28,7 +48,7 @@ void testApp::setupGui(){
     m_pnSettings.setup("Settings", "settings.xml", ofGetWidth() - 220, 10);
     
     m_pnSettings.add(m_lbConnections.setup("Connections PXws", ""));
-    m_pnSettings.add(m_pxDataPath.set("Data Path", "../../saman_commons"));
+    m_pnSettings.add(m_pxDataPath.set("Data Path", "none, don't care"));
     m_pnSettings.add(m_pxConnection.set("USB Connection", "tty.usbserial-A600KMNU"));
     m_pnSettings.add(m_pxOscPort.set("OSC Port", "9000"));
 

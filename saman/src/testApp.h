@@ -1,9 +1,11 @@
 #pragma once
 
+#define dataPath "../../../../../saman_commons/datas/"
+
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "ofxAnimatableFloat.h"
-#include "samanNetwork.h"
+#include "ofxXbeeNetwork.h"
 
 class testApp : public ofBaseApp{
 	
@@ -58,7 +60,7 @@ public:
     // Animations object to drive boards -------------------
     map<string, ofxAnimatableFloat> m_aAnims;
     // Networks of arduino boards
-    samanNetwork                  m_oXbees;
+    ofxXbeeNetwork                  m_oXbees;
     
 };
 
