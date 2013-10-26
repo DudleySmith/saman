@@ -3,15 +3,23 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "testApp::setup():testApp.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "testApp::keyReleased(int):testApp.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "m_bDisplayGui">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "samanNetwork::draw():samanNetwork.cpp">
          <PersistentStrings>
             <PersistentString
                value = "this.m_aNodes">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "testApp::setup():testApp.cpp">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

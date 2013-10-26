@@ -43,6 +43,7 @@
 		EA0667CF181674040042022B /* ofxXbeeNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA0667B5181674040042022B /* ofxXbeeNetwork.cpp */; };
 		EA0667D0181674040042022B /* ofxXbeeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA0667B7181674040042022B /* ofxXbeeNode.cpp */; };
 		EA0667D1181674040042022B /* ofxXbeeNodePin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA0667B9181674040042022B /* ofxXbeeNodePin.cpp */; };
+		EAE41D131819398300082F23 /* samanNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAE41D111819398300082F23 /* samanNetwork.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,8 @@
 		EA0667B8181674040042022B /* ofxXbeeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXbeeNode.h; sourceTree = "<group>"; };
 		EA0667B9181674040042022B /* ofxXbeeNodePin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXbeeNodePin.cpp; sourceTree = "<group>"; };
 		EA0667BA181674040042022B /* ofxXbeeNodePin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXbeeNodePin.h; sourceTree = "<group>"; };
+		EAE41D111819398300082F23 /* samanNetwork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = samanNetwork.cpp; path = ../apps/saman/saman_commons/classes/samanNetwork.cpp; sourceTree = "<group>"; };
+		EAE41D121819398300082F23 /* samanNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = samanNetwork.h; path = ../apps/saman/saman_commons/classes/samanNetwork.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +175,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				EAE41D141819398A00082F23 /* Commons */,
 				EA066768181674040042022B /* ofxAnimatable */,
 				EA066784181674040042022B /* ofxGui */,
 				EA066797181674040042022B /* ofxXbeeNetwork */,
@@ -343,6 +347,15 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		EAE41D141819398A00082F23 /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				EAE41D111819398300082F23 /* samanNetwork.cpp */,
+				EAE41D121819398300082F23 /* samanNetwork.h */,
+			);
+			name = Commons;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -439,6 +452,7 @@
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				EA0667BF181674040042022B /* ofxAnimatable.cpp in Sources */,
 				EA0667C7181674040042022B /* ofxPanel.cpp in Sources */,
+				EAE41D131819398300082F23 /* samanNetwork.cpp in Sources */,
 				EA0667C4181674040042022B /* ofxButton.cpp in Sources */,
 				EA0667CE181674040042022B /* ofxXbeeDummyProtocol.cpp in Sources */,
 				EA0667C2181674040042022B /* ofxAnimatableOfPoint.cpp in Sources */,

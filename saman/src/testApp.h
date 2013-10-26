@@ -4,22 +4,20 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
-#include "ofxAnimatableFloat.h"
-#include "ofxXbeeNetwork.h"
+#include "samanNetwork.h"
 
 class testApp : public ofBaseApp{
 	
 public:
     void setup();
     void setupGui();
-    void setupAnims();
     
     void update();
     void updateGui();
     void updateAnims();
     
     void draw();
-    void drawXbeeNodes();
+    void drawBackground();
     
     void keyPressed  (int key);
     void keyReleased(int key);
@@ -31,6 +29,10 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    // -------------------------------------------------
+    // GUI ---------------------------------------------
+    bool        m_bDisplayGui;
+    
     // PARAMETERS --------------------------------------
     ofxPanel    m_pnSettings;
     
@@ -38,6 +40,7 @@ public:
     ofParameter<string> m_pxDataPath;
     ofParameter<string> m_pxConnection;
     ofParameter<string> m_pxOscPort;
+    ofParameter<string> m_pxBackgroundImage;
     
     ofxLabel   m_lblAnimParams;
     ofParameter<float>  m_pxDropDuration;
@@ -57,10 +60,14 @@ public:
     ofxButton       m_btOneDrop;
     ofxButton       m_btOneWholeStrip;
     
-    // Animations object to drive boards -------------------
-    map<string, ofxAnimatableFloat> m_aAnims;
+    ofxLabel       m_lbMousePos;
+    // -------------------------------------------------
+    
     // Networks of arduino boards
-    ofxXbeeNetwork                  m_oXbees;
+    samanNetwork                  m_oXbees;
+    
+    // Background
+    ofImage m_oBackgroundImage;
     
 };
 

@@ -1,9 +1,11 @@
 <Settings>
 	<Connections_PXws/>
-	<Data_Path>../../../saman_commons</Data_Path>
+	<Data_Path>/Users/dudleysmith/Dude_s_Place/_OF/0.8.0/apps/saman/saman_commons/datas</Data_Path>
 	<USB_Connection>tty.usbserial-A600KMNU</USB_Connection>
 	<OSC_Port>9000</OSC_Port>
 	<Animations/>
 	<DropDuration>2</DropDuration>
 	<DropSmoothness>0.1</DropSmoothness>
+<Settings/>
+	<Background_Image>imageSansLumiere.jpg</Background_Image>
 </Settings>
