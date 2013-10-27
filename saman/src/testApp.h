@@ -4,6 +4,7 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxEasyOsc.h"
 #include "samanNetwork.h"
 
 class testApp : public ofBaseApp{
@@ -39,7 +40,6 @@ public:
     ofxLabel    m_lbConnections;
     ofParameter<string> m_pxDataPath;
     ofParameter<string> m_pxConnection;
-    ofParameter<string> m_pxOscPort;
     ofParameter<string> m_pxBackgroundImage;
     
     ofxLabel   m_lblAnimParams;
@@ -68,6 +68,12 @@ public:
     
     // Background
     ofImage m_oBackgroundImage;
+    
+    // Osc Shit
+    ofxEasyOSc  m_oOsc;
+    ofxPanel    m_pnGuiOscSettings;
+    ofxLabel    m_lbHost;
+    ofxLabel    m_lbSet;
     
 };
 

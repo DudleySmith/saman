@@ -9,6 +9,12 @@
       location = "container:"
       name = "Example">
       <FileRef
+         location = "group:../../addons/ofxEasyOsc/ofxEasyOsc_SenderExample/ofxEasyOsc_SenderExample.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../../addons/ofxEasyOsc/ofxEasyOsc_ReceiverExample/ofxEasyOsc_ReceiverExample.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:../../addons/ofxAnimatable/example/example_ofxAnimatable.xcodeproj">
       </FileRef>
       <FileRef

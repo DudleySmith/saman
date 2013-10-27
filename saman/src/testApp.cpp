@@ -40,6 +40,15 @@ void testApp::setup(){
     m_oXbees.setupANode("0007");
     m_oXbees.setupANode("0008");
     
+    // OSC and its gui
+    m_oOsc.loadParameters();
+    m_pnGuiOscSettings.setup(m_oOsc.getSettings());
+    m_pnGuiOscSettings.add(m_lbHost.setup("Host OSC", m_oOsc.getHost()));
+    m_pnGuiOscSettings.add(m_lbSet.setup("Set OSC",m_oOsc.getSet()));
+    m_pnGuiOscSettings.setPosition(10, 60);
+    m_pnGuiOscSettings.loadFromFile("settings.xml");
+    m_oOsc.setup(EASYOSC_IN);
+    
 }
 
 
@@ -49,12 +58,11 @@ void testApp::setupGui(){
     m_bDisplayGui = false;
     
     // SETTINGS ---------------------------------------------------------------------------
-    m_pnSettings.setup("Settings", "settings.xml", ofGetWidth() - 220, 10);
+    m_pnSettings.setup("others", "settings.xml", ofGetWidth() - 220, 10);
     
     m_pnSettings.add(m_lbConnections.setup("Connections PXws", ""));
     m_pnSettings.add(m_pxDataPath.set("Data Path", "none, don't care"));
     m_pnSettings.add(m_pxConnection.set("USB Connection", "tty.usbserial-A600KMNU"));
-    m_pnSettings.add(m_pxOscPort.set("OSC Port", "9000"));
     m_pnSettings.add(m_pxBackgroundImage.set("Background Image", "background.jpg"));
 
     m_pnSettings.add(m_lblAnimParams.setup("Animations", ""));
@@ -108,11 +116,16 @@ void testApp::update(){
     }
     */
     // GUI --
+    m_lbHost = m_oOsc.getHost();
+    m_lbSet = m_oOsc.getSet();
+
     updateGui();
     // Anims --
     updateAnims();
     // Update network : Send / Read
     m_oXbees.update();
+    // OSC
+    m_oOsc.update();
     // Dispaly Mouse position
     m_lbMousePos = ofToString(ofGetMouseX()) + ":" + ofToString(ofGetMouseY());
     
@@ -186,6 +199,7 @@ void testApp::draw(){
     // GUI --
     if (m_bDisplayGui==true) {
         m_pnSettings.draw();
+        m_pnGuiOscSettings.draw();
         m_pnTest.draw();
     }else{
         ofDrawBitmapString("$ to show GUI", 10, ofGetHeight() - 10);
