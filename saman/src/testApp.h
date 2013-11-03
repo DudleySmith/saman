@@ -15,7 +15,7 @@ public:
     
     void update();
     void updateGui();
-    void updateAnims();
+    void updateOscInput();
     
     void draw();
     void drawBackground();
@@ -41,10 +41,14 @@ public:
     ofParameter<string> m_pxDataPath;
     ofParameter<string> m_pxConnection;
     ofParameter<string> m_pxBackgroundImage;
+    ofxToggle           m_btVerbose;
     
     ofxLabel   m_lblAnimParams;
-    ofParameter<float>  m_pxDropDuration;
+    ofParameter<float>  m_pxDropDurationMin;
+    ofParameter<float>  m_pxDropDurationMax;
     ofParameter<float>  m_pxDropSmoothness;
+    ofParameter<float>  m_pxDispGenCorrection;
+    ofParameter<float>  m_pxDispNodeCorrection;
     
     // TEST --------------------------------------
     ofxPanel        m_pnTest;

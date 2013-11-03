@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../addons/ofxEasyOsc/src/ofxEasyOsc.cpp"
-            timestampString = "404589283.271521"
+            filePath = "saman/src/testApp.cpp"
+            timestampString = "405197624.49049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "ofxEasyOSc::read(ofxOscMessage m)"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
+            landmarkName = "testApp::updateOscInput()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

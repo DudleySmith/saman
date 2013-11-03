@@ -2,8 +2,8 @@
 	<oscSettings>
 		<Host>localhost</Host>
 		<Set>saman</Set>
-		<PortIn>9000</PortIn>
-		<PortOut>9001</PortOut>
+		<PortIn>9001</PortIn>
+		<PortOut>9000</PortOut>
 		<Host_OSC>xxx</Host_OSC>
 		<Set_OSC>xxx</Set_OSC>
 	</oscSettings>
@@ -16,6 +16,11 @@
 		<Animations/>
 		<DropDuration>2</DropDuration>
 		<DropSmoothness>0.1</DropSmoothness>
+	<DropDuration_Min>2</DropDuration_Min>
+		<DropDuration_Max>2</DropDuration_Max>
+		<DispCorrection>0.002</DispCorrection>
+	<DispGenCorrection>0.00833333</DispGenCorrection>
+		<DispNodeCorrection>0.0463333</DispNodeCorrection>
 	</others>
 		
 </Settings>

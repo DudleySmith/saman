@@ -64,16 +64,20 @@ void testApp::setupGui(){
     m_pnSettings.add(m_pxDataPath.set("Data Path", "none, don't care"));
     m_pnSettings.add(m_pxConnection.set("USB Connection", "tty.usbserial-A600KMNU"));
     m_pnSettings.add(m_pxBackgroundImage.set("Background Image", "background.jpg"));
+    m_pnSettings.add(m_btVerbose.ofxToggle::setup("Verbose", true));
 
     m_pnSettings.add(m_lblAnimParams.setup("Animations", ""));
-    m_pnSettings.add(m_pxDropDuration.set("DropDuration", 2, 0, 10));
+    m_pnSettings.add(m_pxDropDurationMin.set("DropDuration Min", 2, 0, 10));
+    m_pnSettings.add(m_pxDropDurationMax.set("DropDuration Max", 2, 0, 10));
     m_pnSettings.add(m_pxDropSmoothness.set("DropSmoothness", 0.1, 0, 1));
+    m_pnSettings.add(m_pxDispGenCorrection.set("DispGenCorrection", 0.05, 0, 0.1));
+    m_pnSettings.add(m_pxDispNodeCorrection.set("DispNodeCorrection", 0.05, 0, 0.1));
 
     m_pnSettings.setWidthElements(300);
     m_pnSettings.loadFromFile("settings.xml");
     
     // TEST ---------------------------------------------------------------------------
-    m_pnTest.setup("Test","settings.xml", ofGetWidth() - 220, 180);
+    m_pnTest.setup("Test","settings.xml", ofGetWidth() - 220, 250);
 
     m_pnTest.add(m_slCardID.setup("Card ID", 1, 1, 10));
     
@@ -93,48 +97,135 @@ void testApp::setupGui(){
 
 //--------------------------------------------------------------
 void testApp::update(){
-    /*
-    // test update
-    string sControl = "";
-    map<string, ofxXbeeNode>::iterator  oneNode;
-    map<string, ofxXbeeNode>            nodes = m_oXbees.getNodes();
-    for (oneNode=nodes.begin(); oneNode!=nodes.end(); oneNode++) {
-        // Control pins of a node
-        map<int, ofxXbeeNodePin>::iterator  onePin;
-        map<int, ofxXbeeNodePin>            pins = (*oneNode).second.getPins();
-        
-        for (onePin=pins.begin(); onePin!=pins.end(); onePin++) {
-            sControl = "Node : " + (*oneNode).first + " : " +  "Pin : " + ofToString((*onePin).first) + " : " + "Value = " + ofToString((*onePin).second.getAValue(0));
-            if((*onePin).second.getAValue(0) > 0){
-                ofLogVerbose() << "Van de diou, c'est bon ca !";
-            }
-            //ofLogVerbose() << sControl;
-        }
-        
-        //ofLogVerbose() << "end";
-
-    }
-    */
+    
     // GUI --
     m_lbHost = m_oOsc.getHost();
     m_lbSet = m_oOsc.getSet();
-
     updateGui();
-    // Anims --
-    updateAnims();
+    
     // Update network : Send / Read
     m_oXbees.update();
+    
     // OSC
-    m_oOsc.update();
+    updateOscInput();
+    
     // Dispaly Mouse position
     m_lbMousePos = ofToString(ofGetMouseX()) + ":" + ofToString(ofGetMouseY());
     
 }
 
-
-
 //--------------------------------------------------------------
-void testApp::updateAnims(){
+void testApp::updateOscInput(){
+    
+    string nameKey = "";
+    double value0 = 0;
+    double duration = 0;
+    
+    // --
+    m_oOsc.update();
+    
+    // --
+    float genIntensity = m_oOsc.getConstValue("/params/general/intensity");
+    float genCenter = m_oOsc.getConstValue("/params/general/center");
+    float genDispersion = m_oOsc.getConstValue("/params/general/disp");
+    float genDispersionMin = m_oOsc.getConstValue("/params/general/dispMin");
+    
+    genDispersion = ofMap(genDispersion, 0, 1, m_pxDispGenCorrection, 1);
+    
+    int idxNodePin = 0;
+    int idxGeneralPin = 0;
+
+    // --
+    map<string, ofxXbeeNode>::iterator oneNode;
+    map<string, ofxXbeeNode>           nodes = m_oXbees.getNodes();
+    
+    for (oneNode=nodes.begin(); oneNode!=nodes.end(); oneNode++) {
+        
+        // --
+        float nodeMix = m_oOsc.getConstValue("/params/"+(*oneNode).first+"/mix");
+        float nodeIntensity = m_oOsc.getConstValue("/params/"+(*oneNode).first+"/intensity");
+        float nodeCenter = m_oOsc.getConstValue("/params/"+(*oneNode).first+"/center");
+        float nodeDispersion = m_oOsc.getConstValue("/params/"+(*oneNode).first+"/disp");
+        float nodeDispersionMin = m_oOsc.getConstValue("/params/"+(*oneNode).first+"/dispMin");
+        
+        nodeDispersion = ofMap(nodeDispersion, 0, 1, m_pxDispNodeCorrection, 1);
+        
+        // Check all messages --
+        map<int, ofxXbeeNodePin>::iterator onePin;
+        map<int, ofxXbeeNodePin>           pins = m_oXbees.getNodes()[(*oneNode).first].getPins();
+        idxNodePin = 0;
+        
+        for (onePin=pins.begin(); onePin!=pins.end(); onePin++) {
+            
+            float nodePinRatio = (float)idxNodePin/(float)pins.size();
+            float generalPinRatio = (float)idxGeneralPin/(float)(pins.size()*nodes.size());
+
+            
+            // --
+            nameKey = (*oneNode).first+"/"+ofToString((*onePin).first);
+            ofLogVerbose() << nameKey << "node Ratio : " << ofToString(nodePinRatio) << "general Ratio : " << ofToString(generalPinRatio);
+            // --
+            value0 = m_oOsc.getEvent("drops", nameKey);
+            if (value0>0) {
+                // ----------------------------------------------------
+                // DROP ANIMATION -------------------------------------
+                // --
+                duration = ofMap(value0, 0, 1, m_pxDropDurationMax, m_pxDropDurationMin);
+                // --
+                //ofLogVerbose() << " :" << duration;
+                m_oXbees.animateDrop((*oneNode).first, (*onePin).first, duration);
+                
+            }else{
+                // ----------------------------------------------------
+                // GLOBAL COMMAND -------------------------------------
+                // --
+                float nodePinValue = 0;
+                float genPinValue = 0;
+                
+                // --
+                if(nodePinRatio>=nodeCenter && nodePinRatio<=nodeCenter+nodeDispersion){
+                    nodePinValue = ofMap(nodePinRatio, nodeCenter, nodeCenter+nodeDispersion, 1, nodeDispersionMin, true);
+                    
+                }else if(nodePinRatio>=nodeCenter-nodeDispersion && nodePinRatio<=nodeCenter){
+                    nodePinValue = ofMap(nodePinRatio, nodeCenter, nodeCenter-nodeDispersion, 1, nodeDispersionMin, true);
+                    
+                }else{
+                    nodePinValue = 0;
+                    
+                }
+                nodePinValue *= nodeIntensity;
+                //--
+                
+                // --
+                if(generalPinRatio>=genCenter && generalPinRatio<=genCenter+genDispersion){
+                    genPinValue = ofMap(generalPinRatio, genCenter, genCenter+genDispersion, 1, genDispersionMin, true);
+                    
+                }else if(generalPinRatio>=genCenter-genDispersion && generalPinRatio<=genCenter){
+                    genPinValue = ofMap(generalPinRatio, genCenter, genCenter-genDispersion, 1, genDispersionMin, true);
+                    
+                }else{
+                    genPinValue = 0;
+                }
+                genPinValue *= genIntensity;
+                //--
+                
+                float realValue = nodeMix*nodePinValue + (1-nodeMix)*genPinValue;
+                
+                ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << realValue;
+                m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, realValue);
+                
+            }
+            
+            idxNodePin++;
+            idxGeneralPin++;
+            
+        }
+        
+    }
+
+    
+    
+    
     
 }
 
@@ -177,15 +268,22 @@ void testApp::updateGui(){
         map<int, ofxXbeeNodePin>           pins = m_oXbees.getNodes()[sCardID].getPins();
         
         for (onePin=pins.begin(); onePin!=pins.end(); onePin++) {
-            m_oXbees.animateDrop(sCardID, (*onePin).first, m_pxDropDuration);
+            m_oXbees.animateDrop(sCardID, (*onePin).first, m_pxDropDurationMin);
         }
     }
     
     // Drop One Pin -------------------
     if (m_btOneDrop==true) {
-        m_oXbees.animateDrop(sCardID, m_slPinNumber, m_pxDropDuration);
+        m_oXbees.animateDrop(sCardID, m_slPinNumber, m_pxDropDurationMin);
     }
     
+    
+    // Verbose log ?
+    if(m_btVerbose==true){
+        ofSetLogLevel(OF_LOG_VERBOSE);
+    }else{
+        ofSetLogLevel(OF_LOG_ERROR);
+    }
 }
 
 //--------------------------------------------------------------
@@ -195,6 +293,16 @@ void testApp::draw(){
     
     // Xbee network drawing
     m_oXbees.draw(true, true);
+    
+    // Display OSC messages
+    list<string> messages = m_oOsc.getRoughMessages();
+    list<string>::iterator oneMessage;
+    int idxMessage = 0;
+    
+    for(oneMessage=messages.begin(); oneMessage!=messages.end(); oneMessage++){
+        ofDrawBitmapString((*oneMessage), 0.5*ofGetWidth(), 0.5*ofGetHeight() + 10*idxMessage++);
+        ofLogVerbose() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
+    }
     
     // GUI --
     if (m_bDisplayGui==true) {

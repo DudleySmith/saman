@@ -3,13 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "testApp::setup():testApp.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "testApp::keyReleased(int):testApp.cpp">
+         contextName = "testApp::updateOscInput():testApp.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "m_bDisplayGui">
+               value = "(*oneNode)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -18,6 +15,23 @@
          <PersistentStrings>
             <PersistentString
                value = "this.m_aNodes">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "testApp::setup():testApp.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "ofxEasyOScReader::addEventMessage(std::string, std::vector&lt;double, std::allocator&lt;double&gt; &gt;):ofxEasyOscReader.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "ofxEasyOScReader::getEvent(std::string, std::string):ofxEasyOscReader.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "testApp::keyReleased(int):testApp.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "m_bDisplayGui">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
