@@ -9,6 +9,9 @@
       location = "container:"
       name = "Example">
       <FileRef
+         location = "group:../../examples/communication/serialExample/serialExample.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:../../addons/ofxEasyOsc/ofxEasyOsc_SenderExample/ofxEasyOsc_SenderExample.xcodeproj">
       </FileRef>
       <FileRef

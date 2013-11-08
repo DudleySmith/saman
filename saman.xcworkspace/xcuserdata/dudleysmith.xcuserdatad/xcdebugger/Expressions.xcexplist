@@ -3,12 +3,15 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "testApp::updateOscInput():testApp.cpp">
+         contextName = "ofxXbeeNetwork::serialRead():ofxXbeeNetwork.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "(*oneNode)">
+               value = "m_sCurrentMsg">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "testApp::setup():testApp.cpp">
       </ContextState>
       <ContextState
          contextName = "samanNetwork::draw():samanNetwork.cpp">
@@ -19,21 +22,26 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "testApp::setup():testApp.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "ofxEasyOScReader::addEventMessage(std::string, std::vector&lt;double, std::allocator&lt;double&gt; &gt;):ofxEasyOscReader.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "ofxEasyOScReader::getEvent(std::string, std::string):ofxEasyOscReader.cpp">
-      </ContextState>
-      <ContextState
          contextName = "testApp::keyReleased(int):testApp.cpp">
          <PersistentStrings>
             <PersistentString
                value = "m_bDisplayGui">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "testApp::updateOscInput():testApp.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(*oneNode)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ofxEasyOScReader::getEvent(std::string, std::string):ofxEasyOscReader.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "ofxEasyOScReader::addEventMessage(std::string, std::vector&lt;double, std::allocator&lt;double&gt; &gt;):ofxEasyOscReader.cpp">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

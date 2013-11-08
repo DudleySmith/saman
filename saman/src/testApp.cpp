@@ -163,7 +163,7 @@ void testApp::updateOscInput(){
             
             // --
             nameKey = (*oneNode).first+"/"+ofToString((*onePin).first);
-            ofLogVerbose() << nameKey << "node Ratio : " << ofToString(nodePinRatio) << "general Ratio : " << ofToString(generalPinRatio);
+            //ofLogVerbose() << nameKey << "node Ratio : " << ofToString(nodePinRatio) << "general Ratio : " << ofToString(generalPinRatio);
             // --
             value0 = m_oOsc.getEvent("drops", nameKey);
             if (value0>0) {
@@ -211,7 +211,7 @@ void testApp::updateOscInput(){
                 
                 float realValue = nodeMix*nodePinValue + (1-nodeMix)*genPinValue;
                 
-                ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << realValue;
+                //ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << realValue;
                 m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, realValue);
                 
             }
@@ -235,7 +235,7 @@ void testApp::updateGui(){
     
     int    iCardID = m_slCardID;
     string sCardID = ofToString(iCardID, 0, 4, '0');
-    
+    /*
     // FULL -------------------------
     if (m_btAllWholeStrip==true) {
         // Light On all pins of the node
@@ -276,7 +276,7 @@ void testApp::updateGui(){
     if (m_btOneDrop==true) {
         m_oXbees.animateDrop(sCardID, m_slPinNumber, m_pxDropDurationMin);
     }
-    
+    */
     
     // Verbose log ?
     if(m_btVerbose==true){
@@ -291,25 +291,29 @@ void testApp::draw(){
     
     m_oBackgroundImage.draw(0, 0);
     
-    // Xbee network drawing
-    m_oXbees.draw(true, true);
-    
-    // Display OSC messages
-    list<string> messages = m_oOsc.getRoughMessages();
-    list<string>::iterator oneMessage;
-    int idxMessage = 0;
-    
-    for(oneMessage=messages.begin(); oneMessage!=messages.end(); oneMessage++){
-        ofDrawBitmapString((*oneMessage), 0.5*ofGetWidth(), 0.5*ofGetHeight() + 10*idxMessage++);
-        ofLogVerbose() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
-    }
-    
     // GUI --
     if (m_bDisplayGui==true) {
+        // Xbee network drawing
+        m_oXbees.draw(true, true);
+        
+        // Display OSC messages
+        list<string> messages = m_oOsc.getRoughMessages();
+        list<string>::iterator oneMessage;
+        int idxMessage = 0;
+        
+        ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
+        for(oneMessage=messages.begin(); oneMessage!=messages.end(); oneMessage++){
+            ofDrawBitmapString((*oneMessage), 0.5*ofGetWidth(), 0.5*ofGetHeight() + 10*(1+idxMessage++));
+            ofLogVerbose() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
+        }
+
         m_pnSettings.draw();
         m_pnGuiOscSettings.draw();
         m_pnTest.draw();
+        
     }else{
+        
+        m_oXbees.draw(true, false);
         ofDrawBitmapString("$ to show GUI", 10, ofGetHeight() - 10);
     }
     

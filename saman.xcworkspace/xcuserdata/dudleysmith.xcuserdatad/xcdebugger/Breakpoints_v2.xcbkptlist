@@ -9,13 +9,149 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "saman/src/testApp.cpp"
-            timestampString = "405197624.49049"
+            filePath = "../../addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+            timestampString = "405468263.738689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
-            landmarkName = "testApp::updateOscInput()"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "ofxXbeeDummyProtocol::isComplete(string msg)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ofxXbeeDummyProtocol::isComplete(std::string)"
+                  moduleName = "saman"
+                  urlString = "file:///Users/dudleysmith/Dude_s_Place/_OF/0.8.0/addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+                  timestampString = "405466215.240522"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "304">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ofxXbeeDummyProtocol::isComplete(std::string)"
+                  moduleName = "saman"
+                  urlString = "file:///Users/dudleysmith/Dude_s_Place/_OF/0.8.0/addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+                  timestampString = "405466215.240728"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "926">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ofxXbeeDummyProtocol::isComplete(std::string)"
+                  moduleName = "saman"
+                  urlString = "file:///Users/dudleysmith/Dude_s_Place/_OF/0.8.0/addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+                  timestampString = "405466215.240887"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "1202">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ofxXbeeDummyProtocol::isComplete(std::string)"
+                  moduleName = "saman"
+                  urlString = "file:///Users/dudleysmith/Dude_s_Place/_OF/0.8.0/addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+                  timestampString = "405466215.241044"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "1406">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ofxXbeeDummyProtocol::isComplete(std::string)"
+                  moduleName = "saman"
+                  urlString = "file:///Users/dudleysmith/Dude_s_Place/_OF/0.8.0/addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+                  timestampString = "405466215.241197"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "1482">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../addons/ofxXbeeNetwork/src/ofxXbeeNetwork.cpp"
+            timestampString = "405467687.32197"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "ofxXbeeNetwork::serialRead()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../addons/ofxXbeeNetwork/src/ofxXbeeDummyProtocol.cpp"
+            timestampString = "405468263.738689"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "ofxXbeeDummyProtocol::isComplete(string msg)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../addons/ofxXbeeNetwork/src/ofxXbeeNetwork.cpp"
+            timestampString = "405501980.646717"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "ofxXbeeNetwork::serialRead()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../addons/ofxXbeeNetwork/src/ofxXbeeNetwork.cpp"
+            timestampString = "405501980.646717"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "ofxXbeeNetwork::serialRead()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
