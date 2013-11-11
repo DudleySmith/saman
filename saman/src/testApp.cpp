@@ -30,22 +30,21 @@ void testApp::setup(){
     
     // Network --
     m_oXbees.setup(m_pxConnection);
-    
-    m_oXbees.setupANode("0001");
-    m_oXbees.setupANode("0002");
-    m_oXbees.setupANode("0003");
-    m_oXbees.setupANode("0004");
-    m_oXbees.setupANode("0005");
-    m_oXbees.setupANode("0006");
-    m_oXbees.setupANode("0007");
-    m_oXbees.setupANode("0008");
+    m_oXbees.setupANode(m_lbRecep01);
+    m_oXbees.setupANode(m_lbRecep02);
+    m_oXbees.setupANode(m_lbRecep03);
+    m_oXbees.setupANode(m_lbRecep04);
+    m_oXbees.setupANode(m_lbRecep05);
+    m_oXbees.setupANode(m_lbRecep06);
+    m_oXbees.setupANode(m_lbRecep07);
+    m_oXbees.setupANode(m_lbRecep08);
     
     // OSC and its gui
     m_oOsc.loadParameters();
     m_pnGuiOscSettings.setup(m_oOsc.getSettings());
     m_pnGuiOscSettings.add(m_lbHost.setup("Host OSC", m_oOsc.getHost()));
     m_pnGuiOscSettings.add(m_lbSet.setup("Set OSC",m_oOsc.getSet()));
-    m_pnGuiOscSettings.setPosition(10, 60);
+    m_pnGuiOscSettings.setPosition(10, 650);
     m_pnGuiOscSettings.loadFromFile("settings.xml");
     m_oOsc.setup(EASYOSC_IN);
     
@@ -58,7 +57,7 @@ void testApp::setupGui(){
     m_bDisplayGui = false;
     
     // SETTINGS ---------------------------------------------------------------------------
-    m_pnSettings.setup("others", "settings.xml", ofGetWidth() - 220, 10);
+    m_pnSettings.setup("others", "settings.xml", 10, 10);
     
     m_pnSettings.add(m_lbConnections.setup("Connections PXws", ""));
     m_pnSettings.add(m_pxDataPath.set("Data Path", "none, don't care"));
@@ -73,11 +72,10 @@ void testApp::setupGui(){
     m_pnSettings.add(m_pxDispGenCorrection.set("DispGenCorrection", 0.05, 0, 0.1));
     m_pnSettings.add(m_pxDispNodeCorrection.set("DispNodeCorrection", 0.05, 0, 0.1));
 
-    m_pnSettings.setWidthElements(300);
     m_pnSettings.loadFromFile("settings.xml");
     
     // TEST ---------------------------------------------------------------------------
-    m_pnTest.setup("Test","settings.xml", ofGetWidth() - 220, 250);
+    m_pnTest.setup("Test","settings.xml", 10, 250);
 
     m_pnTest.add(m_slCardID.setup("Card ID", 1, 1, 10));
     
@@ -91,6 +89,23 @@ void testApp::setupGui(){
     m_pnTest.add(m_btOneWholeStrip.setup("Full One pin"));
     
     m_pnTest.add(m_lbMousePos.setup("Mouse", ""));
+    
+    // Devices -----------------------------------
+    m_pnDevices.setup("Devices","devices.xml", 10, 450);
+
+    m_pnDevices.add(m_lbEmitter.setup("Emitter", "xxxx"));
+    
+    m_pnDevices.add(m_lbRecep01.setup("Recep 01", "0001"));
+    m_pnDevices.add(m_lbRecep02.setup("Recep 02", "0002"));
+    m_pnDevices.add(m_lbRecep03.setup("Recep 03", "0003"));
+    m_pnDevices.add(m_lbRecep04.setup("Recep 04", "0004"));
+    m_pnDevices.add(m_lbRecep05.setup("Recep 05", "0005"));
+    m_pnDevices.add(m_lbRecep06.setup("Recep 06", "0006"));
+    m_pnDevices.add(m_lbRecep07.setup("Recep 07", "0007"));
+    m_pnDevices.add(m_lbRecep08.setup("Recep 08", "0008"));
+    
+    m_pnDevices.loadFromFile("devices.xml");
+    // -------------------------------------------------
     
 }
 
@@ -159,11 +174,15 @@ void testApp::updateOscInput(){
             
             float nodePinRatio = (float)idxNodePin/(float)pins.size();
             float generalPinRatio = (float)idxGeneralPin/(float)(pins.size()*nodes.size());
-
+            
+            string keyAnim = (*oneNode).first + ":" + ofToString((*onePin).first, 0, 2, '0') + ":Drop";
+            map<string, ofxAnimatableFloat>::iterator   oneAnim;
+            
+            oneAnim = m_oXbees.m_aAnims.find(keyAnim);
             
             // --
             nameKey = (*oneNode).first+"/"+ofToString((*onePin).first);
-            //ofLogVerbose() << nameKey << "node Ratio : " << ofToString(nodePinRatio) << "general Ratio : " << ofToString(generalPinRatio);
+            //ofLogVerbose() << nameKey;
             // --
             value0 = m_oOsc.getEvent("drops", nameKey);
             if (value0>0) {
@@ -172,10 +191,14 @@ void testApp::updateOscInput(){
                 // --
                 duration = ofMap(value0, 0, 1, m_pxDropDurationMax, m_pxDropDurationMin);
                 // --
-                //ofLogVerbose() << " :" << duration;
+                ofLogVerbose() << " :" << duration;
                 m_oXbees.animateDrop((*oneNode).first, (*onePin).first, duration);
                 
             }else{
+                
+                if(oneAnim != m_oXbees.m_aAnims.end()){
+                if(!(*oneAnim).second.isAnimating()){
+                    
                 // ----------------------------------------------------
                 // GLOBAL COMMAND -------------------------------------
                 // --
@@ -213,7 +236,8 @@ void testApp::updateOscInput(){
                 
                 //ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << realValue;
                 m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, realValue);
-                
+                }
+                }
             }
             
             idxNodePin++;
@@ -294,28 +318,45 @@ void testApp::draw(){
     // GUI --
     if (m_bDisplayGui==true) {
         // Xbee network drawing
-        m_oXbees.draw(true, true);
+        m_oXbees.draw(false, true);
         
         // Display OSC messages
         list<string> messages = m_oOsc.getRoughMessages();
         list<string>::iterator oneMessage;
         int idxMessage = 0;
         
+        ofPushMatrix();
+        ofTranslate(ofGetWidth()*0.5, 10);
+        
         ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
         for(oneMessage=messages.begin(); oneMessage!=messages.end(); oneMessage++){
             ofDrawBitmapString((*oneMessage), 0.5*ofGetWidth(), 0.5*ofGetHeight() + 10*(1+idxMessage++));
             ofLogVerbose() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
         }
-
+        
+        ofPopMatrix();
+        
         m_pnSettings.draw();
         m_pnGuiOscSettings.draw();
         m_pnTest.draw();
+        m_pnDevices.draw();
         
     }else{
         
-        m_oXbees.draw(true, false);
         ofDrawBitmapString("$ to show GUI", 10, ofGetHeight() - 10);
     }
+    
+    // Arbres ˆ gauche
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep01), ofPoint(10,100), 200, 340);
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep02), ofPoint(130,182), 150, 300);
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep03), ofPoint(210,266), 130, 240);
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep04), ofPoint(280,310), 130, 200);
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep05), ofPoint(350,385), 110, 160);
+    
+    // Arbres ˆ droite
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep06), ofPoint(505,350), 190, 240);
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep07), ofPoint(710,290), 250, 300);
+    m_oXbees.drawANode(m_oXbees.getANode(m_lbRecep08), ofPoint(900,130), 320, 450);
     
 }
 

@@ -31,4 +31,6 @@ public:
     map<string, ofxAnimatableFloat> m_aAnims;
     void animateDrop(string _nodeID, int _pinNumber, float _dropDuration);
     
+    ofxXbeeNode getANode(string _nodeID);
+    
 };

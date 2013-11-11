@@ -11,14 +11,18 @@
 // -------------------------------------------------
 void samanNetwork::draw(bool _drawNodes, bool _drawControl){
     if(_drawNodes)      drawNodes();
-    if(_drawControl)    drawControl();
+    
+    ofPushMatrix();
+    ofTranslate(ofGetWidth()*0.5, 10);
+        if(_drawControl)    drawControl();
+    ofPopMatrix();
 }
 
 // ------------------------------------------
 void samanNetwork::drawNodes(){
     
     // Arbres à gauche
-    drawANode(m_aNodes["0001"], ofPoint(10,100), 200, 340);
+    drawANode(m_aNodes["40A1"], ofPoint(10,100), 200, 340);
     drawANode(m_aNodes["0002"], ofPoint(130,182), 150, 300);
     drawANode(m_aNodes["0003"], ofPoint(210,266), 130, 240);
     drawANode(m_aNodes["0004"], ofPoint(280,310), 130, 200);
@@ -212,5 +216,21 @@ void samanNetwork::update(){
 void samanNetwork::animateDrop(string _nodeID, int _pinNumber, float _dropDuration){
     m_aAnims[_nodeID+":"+ofToString(_pinNumber, 0, 2, '0')+":Drop"].setDuration(_dropDuration);
     m_aAnims[_nodeID+":"+ofToString(_pinNumber, 0, 2, '0')+":Drop"].animateFromTo(0, 1);
+}
+
+// -----------------------------------------------------------------
+ofxXbeeNode samanNetwork::getANode(string _nodeID){
+    
+
+    map<string, ofxXbeeNode>            nodes = getNodes();
+    map<string, ofxXbeeNode>::iterator  nodeToReturn = nodes.find(_nodeID);
+    
+    if (nodeToReturn != nodes.end()) {
+        return (*nodeToReturn).second;
+    }else{
+        return ofxXbeeNode();
+    }
+    
+    
 }
 

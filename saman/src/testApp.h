@@ -79,5 +79,19 @@ public:
     ofxLabel    m_lbHost;
     ofxLabel    m_lbSet;
     
+    // Devices -----------------------------------
+    ofxPanel    m_pnDevices;
+    
+    ofxLabel    m_lbEmitter;
+    
+    ofxLabel    m_lbRecep01;
+    ofxLabel    m_lbRecep02;
+    ofxLabel    m_lbRecep03;
+    ofxLabel    m_lbRecep04;
+    ofxLabel    m_lbRecep05;
+    ofxLabel    m_lbRecep06;
+    ofxLabel    m_lbRecep07;
+    ofxLabel    m_lbRecep08;
+    
 };
 
