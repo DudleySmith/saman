@@ -197,48 +197,48 @@ void testApp::updateOscInput(){
             }else{
                 
                 if(oneAnim != m_oXbees.m_aAnims.end()){
-                if(!(*oneAnim).second.isAnimating()){
+                    if(!(*oneAnim).second.isAnimating()){
                     
-                // ----------------------------------------------------
-                // GLOBAL COMMAND -------------------------------------
-                // --
-                float nodePinValue = 0;
-                float genPinValue = 0;
+                        // ----------------------------------------------------
+                        // GLOBAL COMMAND -------------------------------------
+                        // --
+                        float nodePinValue = 0;
+                        float genPinValue = 0;
                 
-                // --
-                if(nodePinRatio>=nodeCenter && nodePinRatio<=nodeCenter+nodeDispersion){
-                    nodePinValue = ofMap(nodePinRatio, nodeCenter, nodeCenter+nodeDispersion, 1, nodeDispersionMin, true);
+                        // --
+                        if(nodePinRatio>=nodeCenter && nodePinRatio<=nodeCenter+nodeDispersion){
+                            nodePinValue = ofMap(nodePinRatio, nodeCenter, nodeCenter+nodeDispersion, 1, nodeDispersionMin, true);
+                        }else if(nodePinRatio>=nodeCenter-nodeDispersion && nodePinRatio<=nodeCenter){
+                            nodePinValue = ofMap(nodePinRatio, nodeCenter, nodeCenter-nodeDispersion, 1, nodeDispersionMin, true);
+                        }else{
+                            nodePinValue = 0;
+                        }
+                        nodePinValue *= nodeIntensity;
+                        //--
                     
-                }else if(nodePinRatio>=nodeCenter-nodeDispersion && nodePinRatio<=nodeCenter){
-                    nodePinValue = ofMap(nodePinRatio, nodeCenter, nodeCenter-nodeDispersion, 1, nodeDispersionMin, true);
+                        // --
+                        if(generalPinRatio>=genCenter && generalPinRatio<=genCenter+genDispersion){
+                            genPinValue = ofMap(generalPinRatio, genCenter, genCenter+genDispersion, 1, genDispersionMin, true);
+                        }else if(generalPinRatio>=genCenter-genDispersion && generalPinRatio<=genCenter){
+                            genPinValue = ofMap(generalPinRatio, genCenter, genCenter-genDispersion, 1, genDispersionMin, true);
+                        }else{
+                            genPinValue = 0;
+                        }
+                        genPinValue *= genIntensity;
+                        //--
                     
-                }else{
-                    nodePinValue = 0;
+                        float realValue = nodeMix*nodePinValue + (1-nodeMix)*genPinValue;
                     
-                }
-                nodePinValue *= nodeIntensity;
-                //--
-                
-                // --
-                if(generalPinRatio>=genCenter && generalPinRatio<=genCenter+genDispersion){
-                    genPinValue = ofMap(generalPinRatio, genCenter, genCenter+genDispersion, 1, genDispersionMin, true);
-                    
-                }else if(generalPinRatio>=genCenter-genDispersion && generalPinRatio<=genCenter){
-                    genPinValue = ofMap(generalPinRatio, genCenter, genCenter-genDispersion, 1, genDispersionMin, true);
-                    
-                }else{
-                    genPinValue = 0;
-                }
-                genPinValue *= genIntensity;
-                //--
-                
-                float realValue = nodeMix*nodePinValue + (1-nodeMix)*genPinValue;
-                
-                //ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << realValue;
-                m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, realValue);
-                }
+                        
+                        //ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << realValue;
+                        //m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, realValue);
+                        m_oXbees.sendNodePin((*oneNode).first, (*onePin).first, pinModePwm, realValue);
+                        
+                    }
                 }
             }
+            
+            
             
             idxNodePin++;
             idxGeneralPin++;
@@ -301,7 +301,6 @@ void testApp::updateGui(){
         m_oXbees.animateDrop(sCardID, m_slPinNumber, m_pxDropDurationMin);
     }
     */
-    
     // Verbose log ?
     if(m_btVerbose==true){
         ofSetLogLevel(OF_LOG_VERBOSE);

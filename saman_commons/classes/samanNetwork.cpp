@@ -207,7 +207,7 @@ void samanNetwork::update(){
     }
     
     // Old
-    ofxXbeeNetwork::update();
+    ofxXbeeNetwork::update(true, false);
     
     
 }
