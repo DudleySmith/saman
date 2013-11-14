@@ -7,6 +7,11 @@
 const int   greenPin = 12; // led sign for good infos -> Green
 const int   redPin = 13; // led sign for good infos -> Red
 
+const int   pinInA0 = A0; // led sign for good infos -> Red
+const int   pinInA1 = A1; // led sign for good infos -> Red
+const int   pinInA2 = A2; // led sign for good infos -> Red
+const int   pinInA3 = A3; // led sign for good infos -> Red
+
 const CRGB  white = CRGB(255,255,255);
 
 CRGB leds_2[NUM_LEDS];
@@ -20,7 +25,7 @@ CRGB leds_9[NUM_LEDS];
 CRGB leds_10[NUM_LEDS];
 CRGB leds_11[NUM_LEDS];
 
-#define nbLoopsForHeartBeat 5000
+#define nbLoopsForHeartBeat 10000
 double nbLoops;
 
 String sXbeeID;
@@ -40,6 +45,12 @@ void setup() {
   // initialize the LED pin as an output
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
+  
+  pinMode(pinInA0, INPUT);
+  pinMode(pinInA1, INPUT);
+  pinMode(pinInA2, INPUT);
+  pinMode(pinInA3, INPUT);
+  
   // Initialize LEDS
   setupLEDS();
 }
@@ -82,12 +93,8 @@ void loop() {
   nbLoops++;
   if(nbLoops>nbLoopsForHeartBeat){
     nbLoops = 0;
-    if(sXbeeID==XBEEID_NONE){
-      sXbeeID = "0001";
-      Serial.println(HEAD + sXbeeID + ID_ASKING + TAIL);
-    }else{
-      Serial.println(HEAD + sXbeeID +  HEARTBEAT + TAIL);
-    }
+    sXbeeID = getXbeeID();
+    Serial.println(HEAD + sXbeeID +  HEARTBEAT + TAIL);
   }
   
   // Receiving message character 1 by 1 --
@@ -269,4 +276,18 @@ void isBad(){
 void isGoodBad(){
   digitalWrite(greenPin, HIGH);
   digitalWrite(redPin, HIGH);
+}
+
+String getXbeeID(){
+  
+  int iXbeeID = 0;
+  
+  if(digitalRead(pinInA0)==HIGH)  iXbeeID += 1;
+  if(digitalRead(pinInA1)==HIGH)  iXbeeID += 2;
+  if(digitalRead(pinInA2)==HIGH)  iXbeeID += 4;
+  //if(digitalRead(pinInA3)==HIGH)  iXbeeID += 8;
+  
+  String XbeeID = "000" + String(iXbeeID);
+  
+  return XbeeID;
 }
