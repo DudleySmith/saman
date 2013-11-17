@@ -241,11 +241,11 @@ void testApp::updateOscInput(){
             
             if(oneAnim != m_oXbees.m_aAnims.end()){
                 if((*oneAnim).second.isAnimating()){
-                    m_oXbees.setNodeDrop((*oneNode).first, (*onePin).first, (*oneAnim).second.getCurrentValue(), 0.5f);
-                    m_oXbees.sendNodeDrop((*oneNode).first, (*onePin).first, (*oneAnim).second.getCurrentValue(), 0.5f);
+                    m_oXbees.sendNodeDrop((*oneNode).first, (*onePin).first, (*oneAnim).second.getCurrentValue());
+                    m_oXbees.setNodeDrop((*oneNode).first, (*onePin).first, (*oneAnim).second.getCurrentValue());
                 }else{
-                    m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, stripLightness);
                     m_oXbees.sendNodePwm((*oneNode).first, (*onePin).first, stripLightness);
+                    m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, stripLightness);
                 }
             }
     
