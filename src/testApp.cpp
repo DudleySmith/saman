@@ -5,8 +5,7 @@ void testApp::setup(){
 	ofSetVerticalSync(true);
 	
 	ofBackground(255);
-	ofSetLogLevel(OF_LOG_VERBOSE);
-    
+	
     // Change the data path
     ofEnableDataPath();
     ofSetDataPathRoot(dataPath);
@@ -21,6 +20,9 @@ void testApp::setup(){
     // GUI --
     setupGui();
     m_pxDataPath = dirDataPath.getAbsolutePath();
+    
+    // Logs --
+    m_lbLogFile = "log_"+ofGetTimestampString("%Y%m%d")+".log";
     
     // BACKGROUND --
     m_oBackgroundImage.loadImage(m_pxBackgroundImage);
@@ -69,7 +71,9 @@ void testApp::setupGui(){
     m_pnSettings.add(m_pxConnection.set("USB Connection", "tty.usbserial-A600KMNU"));
     m_pnSettings.add(m_pxBackgroundImage.set("Background Image", "background.jpg"));
     m_pnSettings.add(m_btVerbose.ofxToggle::setup("Verbose", true));
-
+    m_pnSettings.add(m_btLogToFile.ofxToggle::setup("LogToFile", true));
+    m_pnSettings.add(m_lbLogFile.setup("log file", ""));
+    
     m_pnSettings.add(m_lblAnimParams.setup("Animations", ""));
     m_pnSettings.add(m_pxDropDurationMin.set("DropDuration Min", 2, 0, 10));
     m_pnSettings.add(m_pxDropDurationMax.set("DropDuration Max", 2, 0, 10));
@@ -228,7 +232,7 @@ void testApp::updateOscInput(){
                 //--
                 
                 stripLightness = nodeMix*nodePinValue + (1-nodeMix)*genPinValue;
-                ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << stripLightness;
+                //ofLogVerbose() << " : " << (*oneNode).first<< " : " <<(*onePin).first<< " : " << stripLightness;
                 
             }
             
@@ -276,7 +280,14 @@ void testApp::updateGui(){
     }else{
         ofSetLogLevel(OF_LOG_ERROR);
     }
-
+    
+    // Verbose log ?
+    if(m_btLogToFile==true){
+        ofLogToFile(m_lbLogFile);
+    }else{
+        ofLogToConsole();
+    }
+    
     /*
     // FULL -------------------------
     if (m_btAllWholeStrip==true) {
@@ -343,7 +354,7 @@ void testApp::draw(){
         ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
         for(oneMessage=messages.begin(); oneMessage!=messages.end(); oneMessage++){
             ofDrawBitmapString((*oneMessage), 100, 0.5*ofGetHeight() + 10*(1+idxMessage++));
-            ofLogVerbose() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
+            ofLogNotice() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
         }
         
         ofPopMatrix();
@@ -390,7 +401,7 @@ void testApp::drawBackground(){
     realW   = ofGetWidth();
     realH   = ofGetWidth()/imageRatioW_H;
     
-    ofLogVerbose() << imageW << ":" << imageH << ":" << imageRatioW_H << ":" << realW << ":" << realH;
+//    ofLogVerbose() << imageW << ":" << imageH << ":" << imageRatioW_H << ":" << realW << ":" << realH;
     
 
     

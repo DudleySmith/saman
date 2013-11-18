@@ -42,6 +42,8 @@ public:
     ofParameter<string> m_pxConnection;
     ofParameter<string> m_pxBackgroundImage;
     ofxToggle           m_btVerbose;
+    ofxToggle           m_btLogToFile;
+    ofxLabel            m_lbLogFile;
     
     ofxLabel   m_lblAnimParams;
     ofParameter<float>  m_pxDropDurationMin;
