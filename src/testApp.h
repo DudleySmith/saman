@@ -52,23 +52,6 @@ public:
     ofParameter<float>  m_pxDispGenCorrection;
     ofParameter<float>  m_pxDispNodeCorrection;
     
-    // TEST --------------------------------------
-    ofxPanel        m_pnTest;
-    ofxIntSlider    m_slCardID;
-    
-    ofxLabel       m_lbAll;
-    ofxButton       m_btAllDrop;
-    ofxButton       m_btAllWholeStrip;
-    ofxButton       m_btBlinks;
-    
-    ofxLabel       m_lbOne;
-    ofxIntSlider    m_slPinNumber;
-    ofxButton       m_btOneDrop;
-    ofxButton       m_btOneWholeStrip;
-    
-    ofxLabel       m_lbMousePos;
-    // -------------------------------------------------
-    
     // Networks of arduino boards
     samanNetwork                  m_oXbees;
     

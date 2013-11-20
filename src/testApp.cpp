@@ -50,7 +50,7 @@ void testApp::setup(){
     m_pnGuiOscSettings.add(m_pxMaxMessagesOsc.set("MaxMessagesOsc", 64, 0, 128));
     m_pnGuiOscSettings.add(m_pxMaxMessagesXbee.set("MaxMessagesXbee", 64, 0, 128));
     
-    m_pnGuiOscSettings.setPosition(10, 650);
+    m_pnGuiOscSettings.setPosition(510, 10);
     m_pnGuiOscSettings.loadFromFile("settings.xml");
     m_oOsc.setup(EASYOSC_IN);
     
@@ -84,24 +84,8 @@ void testApp::setupGui(){
 
     m_pnSettings.loadFromFile("settings.xml");
     
-    // TEST ---------------------------------------------------------------------------
-    m_pnTest.setup("Test","settings.xml", 10, 250);
-
-    m_pnTest.add(m_slCardID.setup("Card ID", 1, 1, 10));
-    
-    m_pnTest.add(m_lbAll.setup("All pins", ""));
-    m_pnTest.add(m_btAllDrop.setup("Drop All"));
-    m_pnTest.add(m_btAllWholeStrip.setup("Full All"));
-    
-    m_pnTest.add(m_lbOne.setup("One Pin only", ""));
-    m_pnTest.add(m_slPinNumber.setup("Pin number", 2, 2, 13));
-    m_pnTest.add(m_btOneDrop.setup("Drop One pin"));
-    m_pnTest.add(m_btOneWholeStrip.setup("Full One pin"));
-    
-    m_pnTest.add(m_lbMousePos.setup("Mouse", ""));
-    
     // Devices -----------------------------------
-    m_pnDevices.setup("Devices","devices.xml", 10, 450);
+    m_pnDevices.setup("Devices","devices.xml", 260, 10);
 
     m_pnDevices.add(m_lbEmitter.setup("Emitter", "xxxx"));
     
@@ -133,9 +117,6 @@ void testApp::update(){
     
     // Update network : Send / Read
     m_oXbees.update(m_pxMaxMessagesXbee);
-    
-    // Dispaly Mouse position
-    m_lbMousePos = ofToString(ofGetMouseX()) + ":" + ofToString(ofGetMouseY());
     
 }
 
@@ -187,7 +168,7 @@ void testApp::updateOscInput(){
             stripLightness = 0;
             
             float nodePinRatio = (float)idxNodePin/(float)pins.size();
-            float generalPinRatio = (float)idxGeneralPin/(float)(pins.size()*nodes.size());
+            float generalPinRatio = (float)idxGeneralPin/(float)(pins.size()*m_oXbees.getNodes().size());
             
             // --
             nameKey = (*oneNode).first+"/"+ofToString((*onePin).first);
@@ -253,12 +234,48 @@ void testApp::updateOscInput(){
                 
             }
             
+            // We can not send every 25 fps, arduino can not folllow !!!!!!!!
+            //
+            bool bSendForReal = false;
+            
+            /*
+            
+             Time Frequency Mode
+             
+            int  iSkipFrequency = 2;
+            if(ofGetFrameNum()%iSkipFrequency == 0){
+                bSendForReal = true;
+            }
+            */
+            
+            // Only one node after all
+            int idxNode_A = 1+ofGetFrameNum()%(int)(0.5*m_oXbees.getNodes().size());
+            string keyNodeToSend_A = ofToString(idxNode_A, 0, 4, '0');
+            
+            int idxNode_B = 4+ofGetFrameNum()%(int)(0.5*m_oXbees.getNodes().size());
+            string keyNodeToSend_B = ofToString(idxNode_B, 0, 4, '0');
+            
+            if(keyNodeToSend_A == (*oneNode).first || keyNodeToSend_B == (*oneNode).first){
+                bSendForReal = true;
+                // --
+                ofLogVerbose() << "Only this node will be realy updated : " << (*oneNode).first;
+            }
+            
+            
             if(oneAnim != m_oXbees.m_aAnims.end()){
                 if(m_oXbees.m_aAnims[keyAnim].isAnimating()){
-                   // m_oXbees.sendNodeDrop((*oneNode).first, (*onePin).first, m_oXbees.m_aAnims[keyAnim].val());
-                   // m_oXbees.setNodeDrop((*oneNode).first, (*onePin).first, m_oXbees.m_aAnims[keyAnim].val());
+                    // For communication ----------
+                    if(bSendForReal==true){
+                        m_oXbees.sendNodeDrop((*oneNode).first, (*onePin).first, m_oXbees.m_aAnims[keyAnim].val());
+                    }
+                    // For animation
+                    m_oXbees.setNodeDrop((*oneNode).first, (*onePin).first, m_oXbees.m_aAnims[keyAnim].val());
                 }else{
-                    m_oXbees.sendNodePwm((*oneNode).first, (*onePin).first, stripLightness);
+                    // For communication ----------
+                    if(bSendForReal==true){
+                        m_oXbees.sendNodePwm((*oneNode).first, (*onePin).first, stripLightness);
+                    }
+                    // For animation
                     m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, stripLightness);
                 }
             }
@@ -280,10 +297,6 @@ void testApp::updateOscInput(){
 //--------------------------------------------------------------
 void testApp::updateGui(){
     
-    
-    int    iCardID = m_slCardID;
-    string sCardID = ofToString(iCardID, 0, 4, '0');
-    
     // Verbose log ?
     if(m_btVerbose==true){
         ofSetLogLevel(OF_LOG_VERBOSE);
@@ -298,49 +311,6 @@ void testApp::updateGui(){
         ofLogToConsole();
     }
     
-    /*
-    // FULL -------------------------
-    if (m_btAllWholeStrip==true) {
-        // Light On all pins of the node
-        map<int, ofxXbeeNodePin>::iterator onePin;
-        map<int, ofxXbeeNodePin>           pins = m_oXbees.getNodes()[sCardID].getPins();
-        
-        for (onePin=pins.begin(); onePin!=pins.end(); onePin++) {
-            m_oXbees.setNodeAllStrip(sCardID, (*onePin).first, 1);
-        }
-    }else{
-        // Light On all pins of the node
-        map<int, ofxXbeeNodePin>::iterator onePin;
-        map<int, ofxXbeeNodePin>           pins = m_oXbees.getNodes()[sCardID].getPins();
-        
-        for (onePin=pins.begin(); onePin!=pins.end(); onePin++) {
-            m_oXbees.setNodeAllStrip(sCardID, (*onePin).first, 0);
-        }
-    }
-    // FULL Strip / One Pin -------------------
-    if (m_btOneWholeStrip==true) {
-        m_oXbees.setNodeAllStrip(sCardID, m_slPinNumber, 1);
-    }else{
-        m_oXbees.setNodeAllStrip(sCardID, m_slPinNumber, 0);
-    }
-    
-    // DROP Whole node -------------------------
-    if (m_btAllDrop==true) {
-        // Light On all pins of the node
-        map<int, ofxXbeeNodePin>::iterator onePin;
-        map<int, ofxXbeeNodePin>           pins = m_oXbees.getNodes()[sCardID].getPins();
-        
-        for (onePin=pins.begin(); onePin!=pins.end(); onePin++) {
-            m_oXbees.animateDrop(sCardID, (*onePin).first, m_pxDropDurationMin);
-        }
-    }
-    
-    // Drop One Pin -------------------
-    if (m_btOneDrop==true) {
-        m_oXbees.animateDrop(sCardID, m_slPinNumber, m_pxDropDurationMin);
-    }
-    */
-
 }
 
 //--------------------------------------------------------------
@@ -350,20 +320,24 @@ void testApp::draw(){
     
     // GUI --
     if (m_bDisplayGui==true) {
-        // Xbee network drawing
-        m_oXbees.draw(false, true);
-        
         // Display OSC messages
         list<string> messages = m_oOsc.getRoughMessages();
         list<string>::iterator oneMessage;
         int idxMessage = 0;
         
         ofPushMatrix();
-        ofTranslate(ofGetWidth()*0.5, 10);
+        ofTranslate(10, ofGetHeight()*0.65);
         
+        ofPushMatrix();
+        ofTranslate(ofGetWidth()*0.5, 0);
+            // Xbee network drawing
+            m_oXbees.draw(false, true);
+        ofPopMatrix();
+        
+        // OSC Messages
         ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
         for(oneMessage=messages.begin(); oneMessage!=messages.end(); oneMessage++){
-            ofDrawBitmapString((*oneMessage), 100, 0.5*ofGetHeight() + 10*(1+idxMessage++));
+            ofDrawBitmapString((*oneMessage), 100, 10*idxMessage++);
             ofLogNotice() << "OSC Message [" << idxMessage << "] : " << ofToString((*oneMessage), 0, 2, '0');
         }
         
@@ -371,7 +345,6 @@ void testApp::draw(){
         
         m_pnSettings.draw();
         m_pnGuiOscSettings.draw();
-        m_pnTest.draw();
         m_pnDevices.draw();
         
     }else{
