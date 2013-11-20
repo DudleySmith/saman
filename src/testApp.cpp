@@ -23,6 +23,7 @@ void testApp::setup(){
     
     // Logs --
     m_lbLogFile = "log_"+ofGetTimestampString("%Y%m%d")+".log";
+    ofLogToFile(m_lbLogFile);
     
     // BACKGROUND --
     m_oBackgroundImage.loadImage(m_pxBackgroundImage);
@@ -71,7 +72,7 @@ void testApp::setupGui(){
     m_pnSettings.add(m_pxConnection.set("USB Connection", "tty.usbserial-A600KMNU"));
     m_pnSettings.add(m_pxBackgroundImage.set("Background Image", "background.jpg"));
     m_pnSettings.add(m_btVerbose.ofxToggle::setup("Verbose", true));
-    m_pnSettings.add(m_btLogToFile.ofxToggle::setup("LogToFile", true));
+    m_pnSettings.add(m_btLogToFile.ofxToggle::setup("LogToFile", false));
     m_pnSettings.add(m_lbLogFile.setup("log file", ""));
     
     m_pnSettings.add(m_lblAnimParams.setup("Animations", ""));
@@ -190,16 +191,32 @@ void testApp::updateOscInput(){
             
             // --
             nameKey = (*oneNode).first+"/"+ofToString((*onePin).first);
+            
+            // On envoie alors le message ---------------------------------
+            // Si une animation est en cours, c'est de la goutte de pluie, sinon c'est whole strip
+            string keyAnim = (*oneNode).first + ":" + ofToString((*onePin).first, 0, 2, '0') + ":Drop";
+            map<string, ofxAnimatableFloat>::iterator   oneAnim;
+            
+            oneAnim = m_oXbees.m_aAnims.find(keyAnim);
+            
             // --
             bool isDropEvent = m_oOsc.getEvent("drops", nameKey, value0);
             if (isDropEvent) {
                 // ----------------------------------------------------
                 // DROP ANIMATION -------------------------------------
-                // --
-                duration = ofMap(value0, 0, 1, m_pxDropDurationMax, m_pxDropDurationMin);
-                // --
-                ofLogVerbose() << " :" << duration;
-                m_oXbees.animateDrop((*oneNode).first, (*onePin).first, duration);
+                if(oneAnim != m_oXbees.m_aAnims.end()){
+                    if(m_oXbees.m_aAnims[keyAnim].hasFinishedAnimating()){
+                        if(fabs(m_pxDropDurationMax-m_pxDropDurationMin)>FLT_EPSILON){
+                            // --
+                            duration = ofMap(value0, 0, 1, m_pxDropDurationMax, m_pxDropDurationMin, true);
+                        }else{
+                            duration = m_pxDropDurationMax;
+                        }
+                        // --
+                        ofLogVerbose() << " :" << duration;
+                        m_oXbees.animateDrop((*oneNode).first, (*onePin).first, duration);
+                    }
+                }
                 
             }else{
                 
@@ -236,17 +253,10 @@ void testApp::updateOscInput(){
                 
             }
             
-            // On envoie alors le message ---------------------------------
-            // Si une animation est en cours, c'est de la goutte de pluie, sinon c'est whole strip
-            string keyAnim = (*oneNode).first + ":" + ofToString((*onePin).first, 0, 2, '0') + ":Drop";
-            map<string, ofxAnimatableFloat>::iterator   oneAnim;
-            
-            oneAnim = m_oXbees.m_aAnims.find(keyAnim);
-            
             if(oneAnim != m_oXbees.m_aAnims.end()){
-                if((*oneAnim).second.isAnimating()){
-                    m_oXbees.sendNodeDrop((*oneNode).first, (*onePin).first, (*oneAnim).second.getCurrentValue());
-                    m_oXbees.setNodeDrop((*oneNode).first, (*onePin).first, (*oneAnim).second.getCurrentValue());
+                if(m_oXbees.m_aAnims[keyAnim].isAnimating()){
+                   // m_oXbees.sendNodeDrop((*oneNode).first, (*onePin).first, m_oXbees.m_aAnims[keyAnim].val());
+                   // m_oXbees.setNodeDrop((*oneNode).first, (*onePin).first, m_oXbees.m_aAnims[keyAnim].val());
                 }else{
                     m_oXbees.sendNodePwm((*oneNode).first, (*onePin).first, stripLightness);
                     m_oXbees.setNodeAllStrip((*oneNode).first, (*onePin).first, stripLightness);
@@ -283,7 +293,7 @@ void testApp::updateGui(){
     
     // Verbose log ?
     if(m_btLogToFile==true){
-        ofLogToFile(m_lbLogFile);
+        
     }else{
         ofLogToConsole();
     }
